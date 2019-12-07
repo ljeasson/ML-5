@@ -21,20 +21,37 @@ def compute_margin(data, w, b):
 # Line characterized by w and b that separates
 # training data with largest margin
 def svm_train_brute(training_data):
-    w = 1
+    num_samples = len(training_data)
+    w = np.zeros(num_samples)
+    w = 0
     b = 0
-    S = np.empty([2, 2])
+    S = []
     
-    num_samples = training_data.shape[0]
+    l_rate = 1
+    epoch = 100000
+    
+    '''
     for sample in range(num_samples):
         pt = (training_data[sample][0], training_data[sample][1])
         dist = distance_point_to_hyperplane(pt, w, b)
-        print(dist)
-    print()
 
     margin = compute_margin(training_data, w, b)
     
-    #print(w,b,"\n",S,"\n")
+    '''
+    for e in range(epoch):
+        for i, val in enumerate(training_data):
+            val1 = np.dot((training_data[i][0]), w)
+            #val2 = np.dot(training_data[i][1], w)
+            
+            if (training_data[i][2]*val1 < 1):
+                w = w + l_rate * ((training_data[i][2] * training_data[i][0]) - (2*(1/epoch)*w))
+            else:
+                w = w + l_rate * (-2*(1/epoch)*w)
+            
+    for i, val in enumerate(training_data):
+        S.append(np.dot(training_data[i][0], w))
+
+    S = np.array(S)
     return w,b,S
 
 # Test new data given a decision boundary
