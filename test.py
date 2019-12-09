@@ -1,4 +1,4 @@
-from helpers import generate_training_data_binary, plot_training_data_binary, generate_training_data_multi, plot_training_data_multi, plot_training_data_binary_lines
+from helpers import generate_training_data_binary, plot_training_data_binary, generate_training_data_multi, plot_training_data_multi, plot_training_data_binary_lines, plot_training_data_multi_lines
 from binary_classification import svm_train_brute, svm_test_brute
 from multiclass_classification import svm_train_multiclass, svm_test_multiclass 
 import numpy as np
@@ -30,7 +30,7 @@ for num in (1,2,3,4):
             correct += 1
         count += 1
     training_acc = correct / count 
-    print("Training Acc:",training_acc)
+    #print("Training Acc:",training_acc)
 
     # Testing data
     testing_acc, correct, count = 0, 0, 0
@@ -40,16 +40,24 @@ for num in (1,2,3,4):
             correct += 1
         count += 1
     testing_acc = correct / count 
-    print("Testing Acc:",testing_acc,"\n")
+    #print("Testing Acc:",testing_acc,"\n")
 
     # Plot training data with decision boundaries
     plot_training_data_binary_lines(data,w,b,S)
 
-'''
+
 for num in (1,2):
     # Multiclass Classification
     [data, Y] = generate_training_data_multi(num)
-    plot_training_data_multi(data)
 
+    # Plot original training data
+    #plot_training_data_multi(data)
+    
+    # Train Multiclass Classification
     [W, B] = svm_train_multiclass(data)
-'''
+    
+    # Plot training data with decision boundaries
+    plot_training_data_multi_lines(data, W, B)
+
+    x = np.array([[-2, 1, '*']])
+    y = svm_test_multiclass(W,B,x)
