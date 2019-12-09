@@ -23,8 +23,7 @@ for num in (1,2,3,4):
     print(w,b,S)
     
     # Training data 
-    training_acc = 0
-    correct, count = 0, 0
+    training_acc, correct, count = 0, 0, 0
     for x in data:
         y = svm_test_brute(w,b,x)
         if x[2] == y:
@@ -34,8 +33,7 @@ for num in (1,2,3,4):
     print("Training Acc:",training_acc)
 
     # Testing data
-    testing_acc = 0
-    correct, count = 0, 0
+    testing_acc, correct, count = 0, 0, 0
     for x in test_data:
         y = svm_test_brute(w,b,x)
         if x[2] == y:

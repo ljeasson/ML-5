@@ -4,8 +4,8 @@ import numpy as np
 # and a hyperplane (a line in 2D) 
 # DON'T WORRY ABOUT HIGHER DIMENSIONS!
 def distance_point_to_hyperplane(pt, w, b):
-    p1=np.array([0, (w*0)+b])
-    p2=np.array([15,(w*15) + b])
+    p1=np.array([0.0, (w*0.0)+b])
+    p2=np.array([15.0,(w*15.0) + b])
     p3=np.array([pt[0],pt[1]])
     
     d=np.cross(p2-p1,p3-p1)/np.linalg.norm(p2-p1)
@@ -14,43 +14,51 @@ def distance_point_to_hyperplane(pt, w, b):
 # Takes a set of data and a separator
 # and computes the margin
 def compute_margin(data, w, b):
-    return
+    num_samples = len(data)
+    distances = {}
+
+    # Separate into (+) and (-) samples
+    distances_pos = {}
+    distances_neg = {}
+    for d in data:
+        if d[2] == 1.0:
+            distances_pos.update({(d[0], d[1]) : 0})
+        else:
+            distances_neg.update({(d[0], d[1]) : 0})
+
+    # Get distances for (+) and (-) samples
+    for pos in distances_pos:
+        dist = distance_point_to_hyperplane(pos, w, b)
+        distances_pos[pos] = abs(dist)
+
+    for neg in distances_neg:
+        dist = distance_point_to_hyperplane(neg, w, b)
+        distances_neg[neg] = abs(dist)
+
+    # Get min distance from each list
+    distances_pos = dict(sorted(distances_pos.items(), key=lambda x: x[1]))
+    distances_neg = dict(sorted(distances_neg.items(), key=lambda x: x[1]))
+    minimum_pos = min(distances_pos, key=distances_pos.get)
+    minimum_neg = min(distances_neg, key=distances_neg.get)
+
+    # Get perpendicular line
+    w = np.cross(minimum_pos,minimum_neg)
+    return w
 
 
 # Returns decision boundary for classifier
 # Line characterized by w and b that separates
 # training data with largest margin
 def svm_train_brute(training_data):
-    num_samples = len(training_data)
     w = np.zeros(training_data.shape[1]-1)
     w = 0.0
     b = 0.0
     S = []
-    
-    l_rate = 1
-    epoch = 100000
-    
-    '''
-    for sample in range(num_samples):
-        pt = (training_data[sample][0], training_data[sample][1])
-        dist = distance_point_to_hyperplane(pt, w, b)
 
     margin = compute_margin(training_data, w, b)
+    w = margin
+    S.append(margin)
     
-    '''
-    for e in range(epoch):
-        for i, val in enumerate(training_data):
-            val1 = np.dot((training_data[i][0]), w)
-            #val2 = np.dot(training_data[i][1], w)
-            
-            if (training_data[i][2]*val1 < 1):
-                w = w + l_rate * ((training_data[i][2] * training_data[i][0]) - (2*(1/epoch)*w))
-            else:
-                w = w + l_rate * (-2*(1/epoch)*w)
-            
-    for i, val in enumerate(training_data):
-        S.append(np.dot(training_data[i][0], w))
-
     S = np.array(S)
     return w,b,S
 
