@@ -22,9 +22,9 @@ def compute_margin(data, w, b):
 # training data with largest margin
 def svm_train_brute(training_data):
     num_samples = len(training_data)
-    w = np.zeros(num_samples)
-    w = 0
-    b = 0
+    w = np.zeros(training_data.shape[1]-1)
+    w = 0.0
+    b = 0.0
     S = []
     
     l_rate = 1
@@ -56,5 +56,11 @@ def svm_train_brute(training_data):
 
 # Test new data given a decision boundary
 def svm_test_brute(w, b, x):
-    y = svm_test_brute(w,b,x)
-    return
+    pred = 0
+    result = np.dot(x, w)
+
+    if result[0] >= 0:
+        pred = 1
+    else:
+        pred = -1
+    return pred

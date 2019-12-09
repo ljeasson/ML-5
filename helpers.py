@@ -91,7 +91,7 @@ def plot_training_data_binary(data):
   plt.axis([-m, m, -m, m])
   plt.show()
 
-def plot_training_data_binary_lines(data, S):
+def plot_training_data_binary_lines(data, w, b, S):
   for item in data:
     if item[-1] == 1:
       plt.plot(item[0], item[1], 'b+')
@@ -100,8 +100,9 @@ def plot_training_data_binary_lines(data, S):
   m = max(data.max(), abs(data.min()))+1
   plt.axis([-m, m, -m, m])
   x = np.linspace(-m, m)
-  for s in S:
-    plt.plot(x, s*x)
+  plt.plot(x, w*x)
+  #for s in S:
+  #  plt.plot(x, s*x)
   plt.show()
 
 def plot_training_data_multi(data):
